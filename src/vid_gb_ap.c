@@ -104,9 +104,8 @@ void voice_vid_gb_ap_plugin_exit()
 {
 }
 
-#ifdef MIMIC_ENABLE_PLUGINS
+#ifdef ENABLE_VID_GB_AP_BUILTIN
 #include "cst_plugins.h"
-
 mimic_plugin_t mimic_plugin = { "voice_vid_gb_ap", 0, &voice_vid_gb_ap_plugin_init, &voice_vid_gb_ap_plugin_exit};
 #endif
 

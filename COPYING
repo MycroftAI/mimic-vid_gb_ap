@@ -1,0 +1,35 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Mimic
+Source: https://github.com/mycroftai/mimic-vid_gb_ap
+Comment: Mimic is free software
+ Mimic is available under permissive BSD-like licenses
+ .
+ This file lists all the copyrights and licenses of mimic files.
+
+Files:
+ include/vid_gb_ap.h
+ src/vid_gb_ap_plugin.c
+ src/vid_gb_ap.c
+ src/vid_gb_ap_cg_01_mcep_trees.c
+ src/vid_gb_ap_cg_01_mcep_trees.h
+ src/vid_gb_ap_cg_01_params.c
+ src/vid_gb_ap_cg_08_durmodel.c
+ src/vid_gb_ap_cg_08_durmodel.h
+ src/vid_gb_ap_cg_10_durmodel.c
+ src/vid_gb_ap_cg_10_durmodel.h
+ src/vid_gb_ap_cg_12_mcep_trees.c
+ src/vid_gb_ap_cg_12_mcep_trees.h
+ src/vid_gb_ap_cg_12_params.c
+ src/vid_gb_ap_cg_17_durmodel.c
+ src/vid_gb_ap_cg_17_durmodel.h
+ src/vid_gb_ap_cg_17_mcep_trees.c
+ src/vid_gb_ap_cg_17_mcep_trees.h
+ src/vid_gb_ap_cg_17_params.c
+ src/vid_gb_ap_cg.c
+ src/vid_gb_ap_cg_f0_trees.c
+ src/vid_gb_ap_cg_f0_trees.h
+ src/vid_gb_ap_cg_phonestate.c
+ src/voxdefs.h
+Copyright: No copyright information
+License: No License Information
+
