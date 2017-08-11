@@ -1,31 +1,28 @@
 project('mimic-vid_gb_ap', 'c', default_options : ['c_std=c99'], version: '0')
 voice_name = 'vid_gb_ap'
 
+build_plugin = get_option('plugin')
+
 sources = [
-  'src/vid_gb_ap_cg_17_mcep_trees.c',
-  'src/vid_gb_ap_cg_01_mcep_trees.h',
-  'src/vid_gb_ap_cg_f0_trees.c',
-  'src/vid_gb_ap_cg_17_durmodel.h',
-  'src/vid_gb_ap_cg_phonestate.c',
-  'src/vid_gb_ap_cg_10_durmodel.h',
-  'src/voxdefs.h',
-  'src/vid_gb_ap_cg_12_params.c',
-  'src/vid_gb_ap_cg.c',
-  'src/vid_gb_ap_cg_12_mcep_trees.c',
   'src/vid_gb_ap_cg_01_mcep_trees.c',
-  'src/vid_gb_ap_cg_17_durmodel.c',
-  'src/vid_gb_ap_cg_f0_trees.h',
   'src/vid_gb_ap_cg_01_params.c',
-  'src/vid_gb_ap_cg_17_params.c',
-  'src/vid_gb_ap_cg_17_mcep_trees.h',
-  'src/vid_gb_ap_cg_12_mcep_trees.h',
-  'src/vid_gb_ap.c',
+  'src/vid_gb_ap_cg_08_durmodel.c',
   'src/vid_gb_ap_cg_10_durmodel.c',
-  'src/vid_gb_ap_cg_08_durmodel.h',
-  'src/vid_gb_ap_cg_08_durmodel.c'
+  'src/vid_gb_ap_cg_12_mcep_trees.c',
+  'src/vid_gb_ap_cg_12_params.c',
+  'src/vid_gb_ap_cg_17_durmodel.c',
+  'src/vid_gb_ap_cg_17_mcep_trees.c',
+  'src/vid_gb_ap_cg_17_params.c',
+  'src/vid_gb_ap.c',
+  'src/vid_gb_ap_cg.c',
+  'src/vid_gb_ap_cg_f0_trees.c',
+  'src/vid_gb_ap_cg_phonestate.c'
 ]
 
-includes = [include_directories('include')]
+en_us_header_subdir = join_paths('ttsmimic', 'lang', 'en_US')
+lang_include_dir = include_directories(join_paths(get_option('prefix'), get_option('includedir'), en_us_header_subdir))
+
+includes = [include_directories('include'), lang_include_dir]
 
 # Core Dependency:
 mimiccore = dependency('ttsmimiccore')
@@ -35,9 +32,10 @@ mimicenglish = dependency('ttsmimicenglish')
 # If mimic-core does not have plugin support, disable the plugin
 if mimic_plugin_dir == ''
   build_plugin = false
-else
-  build_plugin = true
 endif
+
+message('Build mimic-vid_gb_ap plugin: @0@'.format(build_plugin))
+
 
 en_us_header_subdir = join_paths('ttsmimic', 'lang', 'en_US')
 
@@ -48,7 +46,7 @@ config_h = configure_file(output : 'mimic_@0@_config.h'.format(voice_name),
                           configuration : conf_data, install: true,
                           install_dir : join_paths(get_option('includedir'), en_us_header_subdir))
 
-sources += [mimic_english_config_h]
+sources += [config_h]
 
 voice_lib = library('ttsmimic_@0@'.format(voice_name), sources,
                     include_directories : includes,
@@ -62,9 +60,9 @@ voice_dep = declare_dependency(link_with : voice_lib,
 if build_plugin
   voice_plugin_lib = library(
     'ttsmimic_@0@_plugin'.format(voice_name),
-    ['src/@0@_plugin.c'.format(voice_name)],
+    ['src/@0@_plugin.c'.format(voice_name), config_h],
     include_directories : includes,
-    dependencies: [mimiccore, ttsmimiclib_english_dep],
+    dependencies: [mimiccore, mimicenglish, voice_dep],
     install_dir: mimic_plugin_dir,
     install: true)
 
@@ -88,6 +86,7 @@ pkg = import('pkgconfig')
 
 pkg.generate(libraries : voice_lib,
              name : 'ttsmimic_@0@'.format(voice_name),
+             subdirs: en_us_header_subdir,
              requires: ['ttsmimicenglish', 'ttsmimiccore'],
              description: '@0@ support for text to speech synthesis in mimic.'.format(voice_name),
              version: meson.project_version())
