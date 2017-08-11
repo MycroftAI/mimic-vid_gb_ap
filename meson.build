@@ -4,6 +4,8 @@ voice_name = 'vid_gb_ap'
 build_plugin = get_option('plugin')
 
 sources = [
+  'src/vid_gb_ap.c',
+  'src/vid_gb_ap_cg.c',
   'src/vid_gb_ap_cg_01_mcep_trees.c',
   'src/vid_gb_ap_cg_01_params.c',
   'src/vid_gb_ap_cg_08_durmodel.c',
@@ -13,28 +15,23 @@ sources = [
   'src/vid_gb_ap_cg_17_durmodel.c',
   'src/vid_gb_ap_cg_17_mcep_trees.c',
   'src/vid_gb_ap_cg_17_params.c',
-  'src/vid_gb_ap.c',
-  'src/vid_gb_ap_cg.c',
   'src/vid_gb_ap_cg_f0_trees.c',
   'src/vid_gb_ap_cg_phonestate.c'
 ]
 
-en_us_header_subdir = join_paths('ttsmimic', 'lang', 'en_US')
-lang_include_dir = include_directories(join_paths(get_option('prefix'), get_option('includedir'), en_us_header_subdir))
-
-includes = [include_directories('include'), lang_include_dir]
+includes = [include_directories('include')]
 
 # Core Dependency:
-mimiccore = dependency('ttsmimiccore')
+mimiccore = dependency('ttsmimic_core')
 mimic_plugin_dir = mimiccore.get_pkgconfig_variable('mimic_plugin_dir')
-mimicenglish = dependency('ttsmimicenglish')
+mimicenglish = dependency('ttsmimic_english')
 
 # If mimic-core does not have plugin support, disable the plugin
 if mimic_plugin_dir == ''
   build_plugin = false
 endif
 
-message('Build mimic-vid_gb_ap plugin: @0@'.format(build_plugin))
+message('Build mimic-@0@ plugin: @1@'.format(voice_name, build_plugin))
 
 
 en_us_header_subdir = join_paths('ttsmimic', 'lang', 'en_US')
@@ -87,7 +84,7 @@ pkg = import('pkgconfig')
 pkg.generate(libraries : voice_lib,
              name : 'ttsmimic_@0@'.format(voice_name),
              subdirs: en_us_header_subdir,
-             requires: ['ttsmimicenglish', 'ttsmimiccore'],
+             requires: ['ttsmimic_english', 'ttsmimic_core'],
              description: '@0@ support for text to speech synthesis in mimic.'.format(voice_name),
              version: meson.project_version())
 
