@@ -24,8 +24,8 @@ includes = [include_directories('include')]
 # English Dependency:
 mimicenglish = dependency('ttsmimic_english', required: false)
 if mimicenglish.found()
-mimiccore = dependency('ttsmimic_core')
-mimic_plugin_dir = mimiccore.get_pkgconfig_variable('mimic_plugin_dir')
+  mimiccore = dependency('ttsmimic_core')
+  mimic_plugin_dir = mimiccore.get_pkgconfig_variable('mimic_plugin_dir')
 else
   # We compile it:
   mimic_english_sub = subproject('mimic-english')
