@@ -1,0 +1,5 @@
+[wrap-git]
+directory=mimic-english
+url=https://github.com/zeehio/mimic-english.git
+revision=56ff86967bf6ad8a8f48db127ae6b90b323e020b
+

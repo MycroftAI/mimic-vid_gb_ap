@@ -21,14 +21,18 @@ sources = [
 
 includes = [include_directories('include')]
 
-# Core Dependency:
+# English Dependency:
+mimicenglish = dependency('ttsmimic_english', required: false)
+if mimicenglish.found()
 mimiccore = dependency('ttsmimic_core')
 mimic_plugin_dir = mimiccore.get_pkgconfig_variable('mimic_plugin_dir')
-mimicenglish = dependency('ttsmimic_english')
-
-# If mimic-core does not have plugin support, disable the plugin
-if mimic_plugin_dir == ''
-  build_plugin = false
+else
+  # We compile it:
+  mimic_english_sub = subproject('mimic-english')
+  mimicenglish = mimic_english_sub.get_variable('ttsmimic_english_dep')
+  mimiccore = mimic_english_sub.get_variable('mimiccore')
+  mimic_plugin_dir = mimic_english_sub.get_variable('mimic_plugin_dir')
+  includes += mimic_english_sub.get_variable('includes')
 endif
 
 message('Build mimic-@0@ plugin: @1@'.format(voice_name, build_plugin))
