@@ -19,7 +19,7 @@ sources = [
   'src/vid_gb_ap_cg_phonestate.c'
 ]
 
-includes = [include_directories('include')]
+includes = [include_directories('include'), include_directories('.')]
 
 # English Dependency:
 mimicenglish = dependency('ttsmimic_english', required: false)
