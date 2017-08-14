@@ -19,7 +19,7 @@ sources = [
   'src/vid_gb_ap_cg_phonestate.c'
 ]
 
-includes = [include_directories('include'), include_directories('.')]
+includes = [include_directories('include')]
 
 # English Dependency:
 mimicenglish = dependency('ttsmimic_english', required: false)
@@ -40,15 +40,6 @@ message('Build mimic-@0@ plugin: @1@'.format(voice_name, build_plugin))
 
 en_us_header_subdir = join_paths('ttsmimic', 'lang', 'en_US')
 
-conf_data = configuration_data()
-conf_data.set('ENABLE_@0@_BUILTIN'.format(voice_name.to_upper()), not build_plugin)
-
-config_h = configure_file(output : 'mimic_@0@_config.h'.format(voice_name),
-                          configuration : conf_data, install: true,
-                          install_dir : join_paths(get_option('includedir'), en_us_header_subdir))
-
-sources += [config_h]
-
 voice_lib = library('ttsmimic_@0@'.format(voice_name), sources,
                     include_directories : includes,
                     dependencies: [mimicenglish, mimiccore],
@@ -61,7 +52,7 @@ voice_dep = declare_dependency(link_with : voice_lib,
 if build_plugin
   voice_plugin_lib = library(
     'ttsmimic_@0@_plugin'.format(voice_name),
-    ['src/@0@_plugin.c'.format(voice_name), config_h],
+    ['src/@0@_plugin.c'.format(voice_name)],
     include_directories : includes,
     dependencies: [mimiccore, mimicenglish, voice_dep],
     install_dir: mimic_plugin_dir,
